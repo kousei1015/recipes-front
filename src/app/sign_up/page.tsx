@@ -26,7 +26,7 @@ const Page = () => {
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const response = await axios.post(
-      "http://localhost:3000/v1/auth/sign_in",
+      "http://localhost:3000/v1/auth/＝",
       {
         email,
         password,
