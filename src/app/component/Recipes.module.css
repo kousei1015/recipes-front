@@ -13,24 +13,33 @@
 .recipe {
     width:calc(33.3333333% - 20px);
     margin: 0 20px 20px 0;
-    padding: 1rem;
     border-radius: 1rem;
-    box-shadow: 0px 0px 4px var(--shadow-color);
-}
-
-.name {
-    margin-bottom: 1rem;
+    box-shadow: 0px 0px 3px var(--shadow-color);
+    background-color: white;
 }
 
 .img_wrapper {
-    height: 250px;
     margin-bottom: 1rem;
+    position: relative;
 }
 
 .img_wrapper > img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    aspect-ratio: 5 / 3.5;
+}
+
+.name {
+    width: 100%;
+    display: block;
+    color: white;
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    translate: -50% -50%;
+    padding: 0.5rem;
+    margin-bottom: -0.5rem;
 }
 
 .btn_wrapper {

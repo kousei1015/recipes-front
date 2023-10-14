@@ -13,7 +13,6 @@ const Recipes = ({ recipesData }: { recipesData: RECIPES }) => {
       {recipesData?.recipes.map((recipe) => (
         <article key={recipe.id} className={styles.recipe}>
           <Link href={`/${recipe.id}`}>
-            <h4 className={styles.name}>{recipe.recipe_name}</h4>
             <div className={styles.img_wrapper}>
               <Image
                 src={recipe.image_url || NoImage}
@@ -21,6 +20,7 @@ const Recipes = ({ recipesData }: { recipesData: RECIPES }) => {
                 width={100}
                 height={100}
               />
+              <span className={styles.name}>{recipe.recipe_name}</span>
             </div>
             <p>ユーザー名: {recipe.user_name}</p>
             <div className={styles.btn_wrapper}>

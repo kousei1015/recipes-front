@@ -47,7 +47,7 @@ const Page = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h2>レシピを投稿する</h2>
+      <h2>レシピ投稿画面</h2>
       <input type="text" value={name} onChange={handleName} placeholder="レシピのタイトルを入力して下さい" />
       <input type="file" name="file" onChange={handleFile} />
       <textarea
