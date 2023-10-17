@@ -1,32 +1,36 @@
 "use client";
-import { useState } from "react";
 import styles from "./../../../styles/Sign.module.css";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Sign } from "../types";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const validationSchema = z.object({
+  email: z
+    .string()
+    .nonempty("メールアドレスを入力して下さい")
+    .email("正しいメールアドレスを入力して下さい"),
+  password: z.string().nonempty().min(6, "パスワードは6文字以上入力して下さい"),
+});
+
 const Page = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Sign>({
+    mode: "onChange",
+    resolver: zodResolver(validationSchema),
+  });
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: Sign) => {
     const response = await axios.post(
       "http://localhost:3000/v1/auth/sign_in",
-      {
-        email,
-        password,
-      },
-      { headers: { "Content-Type": "application/json" } }
+        data,
     );
     const { uid, client, "access-token": accessToken } = response.headers;
     Cookies.set("client", client);
@@ -37,28 +41,20 @@ const Page = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={handleSubmit(onSubmit)}>
       <h2>ログインフォーム</h2>
       <input
         type="text"
-        value={email}
-        onChange={handleChangeEmail}
+        {...register("email")}
         placeholder="emailを入力してください"
       />
       <input
         type="password"
-        value={password}
-        onChange={handleChangePassword}
+        {...register("password")}
         placeholder="passwordを入力してください"
       />
-      <button
-        className={styles.btn}
-        onClick={handleClick}
-        disabled={!email || !password}
-      >
-        送信する
-      </button>
-    </div>
+      <button type="submit">送信する</button>
+    </form>
   );
 };
 
