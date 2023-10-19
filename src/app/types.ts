@@ -1,8 +1,17 @@
 import { ReactNode } from "react";
 
-export type USERINFO = {
-  id: number;
-  name: string;
+export type SignIn = {
+  email: string;
+  password: string;
+}
+
+export type SignUp = SignIn & {
+  name: string
+}
+
+export type AUTHINFO = {
+  is_login: boolean;
+  user_id: number;
 }
 
 export type RECIPEBASE = {
@@ -20,18 +29,17 @@ export type RECIPE = {
   image_url: string;
   user_id: number;
   user_name: string;
+  favorite_id: number;
+  follow_id: number;
 }
 
 export type RECIPES = {
-  is_login: boolean;
   recipes: {
     id: number;
     recipe_name: string;
     image_url: string;
     user_id: number;
     user_name: string;
-    favorite_id?: number;
-    follow_id?: number;
   }[];
 };
 

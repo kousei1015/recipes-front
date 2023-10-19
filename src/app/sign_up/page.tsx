@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Sign } from "../types";
+import { SignUp } from "../types";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -22,13 +22,13 @@ const Page = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Sign>({
+  } = useForm<SignUp>({
     mode: "onChange",
     resolver: zodResolver(validationSchema),
   });
   const router = useRouter();
 
-  const onSubmit = async (data: Sign) => {
+  const onSubmit = async (data: SignUp) => {
     const response = await axios.post("http://localhost:3000/v1/auth/", data);
     const { uid, client, "access-token": accessToken } = response.headers;
     Cookies.set("client", client);
