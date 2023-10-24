@@ -11,21 +11,21 @@ const useFollow = () => {
     "access-token": Cookies.get("access-token"),
   };
 
-  const followUser = async (user_id: number) => {
+  const followUser = async (userId: number) => {
     const url = `http://localhost:3000/v1`;
 
     try {
-      await axios.post(`${url}/relationships`, { user_id }, { headers });
+      await axios.post(`${url}/relationships`, { user_id: userId }, { headers });
       router.refresh();
     } catch (error) {
       console.error("Error following user:", error);
     }
   };
-  const unfollowUser = async (follow_id: number) => {
+  const unfollowUser = async (followId: number) => {
     const url = `http://localhost:3000/v1`;
 
     try {
-      await axios.delete(`${url}/relationships/${follow_id}`, { headers });
+      await axios.delete(`${url}/relationships/${followId}`, { headers });
       router.refresh();
     } catch (error) {
       console.error("Error unfollowing user:", error);
