@@ -1,5 +1,5 @@
 import styles from "./../component/Recipes.module.css";
-import Button from "../component/Button";
+import UnfavoriteButton from "../component/Button/UnfavoriteButton";
 import { FavRecipes } from "../types";
 import Link from "next/link";
 import { cookies } from "next/headers";
@@ -45,9 +45,7 @@ const Page = async () => {
                   />
                 </div>
                 <p>ユーザー名: {recipe.user_name}</p>
-                <Button favorite_id={recipe.favorite_id}>
-                  お気に入りを解除
-                </Button>
+                <UnfavoriteButton favorite_id={recipe.favorite_id} />
               </Link>
             </article>
           );

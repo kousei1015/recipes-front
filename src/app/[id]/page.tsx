@@ -1,40 +1,25 @@
+import useFetchRecipe from "../../../hooks/useFetchRecipe";
+import useAuthInfo from "../../../hooks/useFetchAuth";
+import DeleteButton from "../component/Button/DeleteButton";
+import FavoriteButton from "../component/Button/FavoriteButton";
+import UnfavoriteButton from "../component/Button/UnfavoriteButton";
+import FollowButton from "../component/Button/FollowButton";
+import UnfollowButton from "../component/Button/Unfollow";
 import styles from "./../../../styles/DetailRecipe.module.css";
-import Button from "../component/Button";
 import NoImage from "./../../../public/1560031.jpg";
-import { RECIPE, USERINFO } from "../types";
 import Image from "next/image";
-import { cookies } from "next/headers";
-
-const fetchRecipeData = async (id: string) => {
-  const recipe = await fetch(`http://localhost:3000/v1/recipes/${id}`, {
-    cache: "no-cache",
-  });
-  const result = await recipe.json();
-  return result;
-};
-
-const fetchUserSelfData = async () => {
-  const cookieStore = cookies();
-  const client = cookieStore.get("client");
-  const accessToken = cookieStore.get("access-token");
-  const uid = cookieStore.get("uid");
-    const res = await fetch("http://localhost:3000/v1/users", {
-      headers: {
-        uid: uid?.value as any,
-        client: client?.value as any,
-        "access-token": accessToken?.value as any,
-      },
-      cache: "no-store",
-    });
-    const result = await res.json();
-    return result;
-};
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const [recipe, userSelf]: [RECIPE, USERINFO] = await Promise.all([
-    fetchRecipeData(params.id),
-    fetchUserSelfData(),
+  const [{ recipe }, { authData }] = await Promise.all([
+    useFetchRecipe(params.id),
+    useAuthInfo(),
   ]);
+
+  const isOwnRecipe = recipe.user_id === authData.user_id;
+  
+  const isFavorited = !!recipe.favorite_id;
+  
+  const isFollowed =  !!recipe.follow_id;
 
   return (
     <div className={styles.wrapper}>
@@ -51,7 +36,26 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className={styles.process}>
           <p>{recipe.process}</p>
         </div>
-        {recipe.user_id === userSelf?.id ? <Button>削除</Button> : null}
+        {/*自身の投稿の場合は削除ボタンを表示させる。 そうでない場合は投稿したユーザー名を表示させる */}
+        {isOwnRecipe ? (
+          <DeleteButton recipe_id={recipe.id}/>
+        ) : (
+          <p>ユーザー名: {recipe.user_name}</p>
+        )}
+
+        {/*既にレシピがお気に入り済みの場合はお気に入りを解除させる そうでない場合は保存させる */}
+        {isFavorited ? (
+          <UnfavoriteButton favorite_id={recipe.favorite_id} />
+        ) : (
+          <FavoriteButton recipe_id={recipe.id}/>
+        )}
+
+        {/*フォロー済みの場合はフォローを解除する。 そうでない場合はフォローする */}
+        {isFollowed ? (
+          <UnfollowButton follow_id={recipe.follow_id}/>
+        ) : (
+          <FollowButton user_id={recipe.user_id} />
+        )}
       </div>
     </div>
   );
