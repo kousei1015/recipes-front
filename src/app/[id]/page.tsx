@@ -16,10 +16,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
   ]);
 
   const isOwnRecipe = recipe.user_id === authData.user_id;
-  
+
   const isFavorited = !!recipe.favorite_id;
-  
-  const isFollowed =  !!recipe.follow_id;
+
+  const isFollowed = !!recipe.follow_id;
 
   return (
     <div className={styles.wrapper}>
@@ -36,9 +36,19 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className={styles.process}>
           <p>{recipe.process}</p>
         </div>
+        <h3>材料</h3>
+        <ul>
+          {recipe.ingredients?.map((ingredient) => {
+            return (
+              <li className={styles.ingredient}>
+                {ingredient.name} {ingredient.quantity}
+              </li>
+            );
+          })}
+        </ul>
         {/*自身の投稿の場合は削除ボタンを表示させる。 そうでない場合は投稿したユーザー名を表示させる */}
         {isOwnRecipe ? (
-          <DeleteButton recipe_id={recipe.id}/>
+          <DeleteButton recipe_id={recipe.id} />
         ) : (
           <p>ユーザー名: {recipe.user_name}</p>
         )}
@@ -47,12 +57,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
         {isFavorited ? (
           <UnfavoriteButton favorite_id={recipe.favorite_id} />
         ) : (
-          <FavoriteButton recipe_id={recipe.id}/>
+          <FavoriteButton recipe_id={recipe.id} />
         )}
 
         {/*フォロー済みの場合はフォローを解除する。 そうでない場合はフォローする */}
         {isFollowed ? (
-          <UnfollowButton follow_id={recipe.follow_id}/>
+          <UnfollowButton follow_id={recipe.follow_id} />
         ) : (
           <FollowButton user_id={recipe.user_id} />
         )}
