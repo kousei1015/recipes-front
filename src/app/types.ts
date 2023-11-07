@@ -26,6 +26,10 @@ export type RECIPE = {
   id: number;
   recipe_name: string;
   process: string;
+  ingredients: {
+    name: string;
+    quantity: string;
+  }[]
   image_url: string;
   user_id: number;
   user_name: string;
